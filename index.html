@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>To-Do App</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="open.js"></script>
+</head>
+<body>
+  <div class="wrapper">
+
+    
+ <!--profile page-->
+<div id="profile-page" class="page">
+  <div class="profile-header">
+    <div class="profile-icon">
+      <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/>
+        </svg>
+      </span>
+    </div>
+    <span class="profile-username">user</span>
+  </div>
+
+  <div class="profile-body">
+    <p class="notification-text">If you want to receive daily notification</p>
+
+ 
+    <div class="acc-container">
+    <div class="auth-section">
+
+      <!--login-->
+      <div id="sign-in-form">
+        <h2>Sign In</h2>
+        <label for="signin-email">Email</label><br />
+        <input type="email" id="signin-email" placeholder="example9@gmail.com" class="input-field" /><br />
+
+        <label for="signin-password">Password</label><br />
+        <input type="password" id="signin-password" placeholder="password" class="input-field" /><br />
+
+        <button id="signin-button" class="sign-in-button">Sign In</button>
+        <p>
+          Don't have an account? 
+          <a href="#" id="show-signup">Sign Up</a>
+        </p>
+      </div>
+
+      <!--signup-->
+      <div id="sign-up-form" style="display: none;">
+        <h2>Sign Up</h2><br>
+        <label for="username">Username</label><br />
+        <input type="text" id="username" placeholder="username" class="input-field" /><br />
+
+        <label for="signup-email">Email</label><br />
+        <input type="email" id="signup-email" placeholder="example9@gmail.com" class="input-field" /><br />
+
+        <label for="signup-password">Password</label><br />
+        <input type="password" id="signup-password" placeholder="password" class="input-field" /><br />
+
+        <label for="signup-password-confirm">Confirm Password</label><br />
+        <input type="password" id="signup-password-confirm" placeholder="retype password" class="input-field" /><br />
+
+        <button id="signup-button" class="sign-in-button">Sign Up</button>
+        <p>
+          Already have an account? 
+          <a href="#" id="show-signin">Sign In</a>
+        </p>
+      </div>
+    </div>
+    </div>
+
+    <!--profile-->
+    <div id="profile-container" style="display: none;">
+      <div class="logo">ToDone</div>
+      <div class="profile-card">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/>
+        </svg>
+        <div class="user-info">
+          <h2>nada</h2>
+          <p class="about">About me<br><span>hiii</span></p>
+        </div>
+        <div class="tasks">
+          <p>Tasks Completed: <strong>43</strong></p>
+          <p>Current Focus: <strong>idk for now</strong></p>
+        </div>
+        <div class="highlights">
+          <div class="highlight">
+            <p>Overdue Tasks</p>
+            <span>-</span>
+          </div>
+          <div class="highlight">
+            <p>Completed Today</p>
+            <span>-</span>
+          </div>
+          <div class="highlight">
+            <p>Total Tasks</p>
+            <span>-</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div id="auth-message" style="text-align: center; margin-top: 10px;"></div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+    <!--tasks page-->
+    <div id="tasks-page" class="page">
+      <div class="top-row">
+        <div class="top-header">
+          <h1 id="greeting"> g</h1>
+          <p id="current-date">32</p>
+          <p id="current-time">10:03 AM</p>
+        </div>
+
+        <div class="controls">
+          <label for="filterOptions">Filter:</label>
+          <select id="filterOptions">
+            <option value="all">All</option>
+            <option value="today">Today</option>
+          </select>
+        </div>
+      </div>
+
+       <div class="message"></div>
+
+      <div class="task-input">
+        <input type="text" id = "task-text" placeholder="Add a new task" />
+        <input type="datetime-local" id="due-date">
+        <button id="submit-task">Submit</button>
+      </div>
+
+        <div class="no-tasks" style="display: block; text-align: center;"> <span class="clipboard-icon" style="font-size: 2rem;">🗓️</span>
+        <span class="x-icon" style="font-size: 2rem;">x</span></div>
+        <ul class="task-box"></ul>
+         <div class="container">
+        <div class="divider"></div>
+        <div class="Completed-heading">
+          <h4>Completed Tasks:</h4></div>
+        <div class="completed-box"></div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+    <!--calendar page-->
+    <div id="calendar-page" class="page" style="display: none;">
+      <h2>Calendar Page</h2>
+      <p>This is where calendar will be.</p>
+    </div>
+
+   
+
+
+
+
+
+
+
+
+    <footer class="bottom-nav">
+      <button class="nav-btn" onclick="showPage('profile-page')"> <i class="uil uil-user nav-icon"> </i><svg xmlns="http://www.w3.org/2000/svg" width = "25" height = "25" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6"> 
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+       </svg> </button>
+      <button class="nav-btn" onclick="showPage('tasks-page')"><i class="uil uil-list-ul nav-icon"></i><svg xmlns="http://www.w3.org/2000/svg" width = "25" height = "25" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6"> 
+        <path stroke-linecap="round" stroke-linejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0 1 18 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3 1.5 1.5 3-3.75" /> 
+      </svg> </button>
+      <button class="nav-btn" onclick="showPage('calendar-page')"><i class="uil uil-calendar-alt nav-icon"></i><svg xmlns="http://www.w3.org/2000/svg" width = "25" height = "25" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6"> 
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+       </svg> </button>
+    </footer>
+
+  </div>
+</body>
+</html>
