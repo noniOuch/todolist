@@ -8,7 +8,8 @@
             font-family: sans-serif;
             background-color: #fefce8;
             margin: 0;
-            padding: 2rem;
+            padding: 0;
+            padding-bottom:100px;
         }
 
         header {
@@ -39,11 +40,14 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
         }
 
         .task-card.done {
             background-color: #e2e8f0;
             text-decoration: line-through;
+            opacity: 0.9;
+            transform: translateY(5px);
         }
 
         .task-list {
@@ -65,17 +69,30 @@
 
         .form-group {
             display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 2rem;
+            flex-wrap: wrap; /* يسمح للعناصر بالتكيف مع الشاشة */
+            gap: 5px; /* مسافة صغيرة بين العناصر */
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 60%; /* الحد الأقصى للعرض حتى يكون مناسبًا للجوال والكمبيوتر */
+            margin: auto; /* توسيط العنصر */
         }
 
-        input[type="text"], input[type="datetime-local"], select {
+        input[type="text"], input[type="datetime-local"], .btn {
+            flex: 1;
+            min-width: 150px;
             padding: 0.5rem;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            min-width: 200px;
+            border: 1px solid #ddd; /* إبقاء الحدود بشكل بسيط وخفيف */
+            border-radius: 8px;
         }
+
+        .btn {
+            background-color: #facc15;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+
 
         .empty-state {
             text-align: center;
@@ -88,11 +105,71 @@
             width: 100px;
             margin-top: 1rem;
         }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #fef9c3;
+            display: flex;
+            justify-content: space-around;
+            padding: 0.5rem 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+
+        .nav-btn {
+            background-color: #facc15;
+            border: none;
+            border-radius: 15px;
+            padding: 0.75rem;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-btn svg {
+            stroke: #000;
+        }
+        .navber {
+            position: sticky;
+            top: 0;
+            display: flex;
+            flex-direction:row;
+            justify-content: flex-start;
+            align-items: center;
+            width: 100%;
+            height:70px;
+            background-color: lightgray;
+            border-bottom-left-radius:30px;
+            border-bottom-right-radius: 30px;
+            padding-left: 10px;
+            margin-bottom:20px;
+        }
+
     </style>
+    <div class="navber" style="background-color:#facc15; color:#fef9c3;" >
+    <h3>
+        ToDone
+    </h3>
+    </div>
+
 </head>
+
 <body>
 
 <header>
+
     <div>
         <h1 id="greeting"></h1>
         <h2 id="date"></h2>
@@ -108,162 +185,254 @@
 
 <form id="taskForm" class="form-group">
     <input type="text" id="taskTitle" placeholder="The task title." required />
-    <input type="datetime-local" id="taskDateTime" />
+    <input type="datetime-local" id="taskDateTime" required />
     <button type="submit" class="btn">Submit</button>
 </form>
 
-<div id="taskContainer">
-    <!-- Rendered tasks will appear here -->
+<div id="taskContainer"></div>
+
+<div id="deleteModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5); justify-content:center; align-items:center;">
+    <div style="background:white; padding:2rem; border-radius:10px; text-align:center; max-width:300px;">
+        <p id="modalText">Are you sure you want to delete this task?</p>
+        <div style="margin-top:1rem;">
+            <button id="confirmDelete" class="btn">Yes</button>
+            <button id="cancelDelete" class="btn"> No</button>
+        </div>
+    </div>
 </div>
 
+<footer class="bottom-nav">
+    <a href="login.html">
+    <button class="nav-btn" >
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+        </svg>
+    </button>
+    </a>
+    <a href="home.html">
+    <button class="nav-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0 1 18 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3 1.5 1.5 3-3.75" />
+        </svg>
+    </button>
+    </a>
+</footer>
+
 <script>
-    const taskTitle = document.getElementById('taskTitle');
-    const taskDateTime = document.getElementById('taskDateTime');
-    const filterSelect = document.getElementById('filterSelect');
-    const taskContainer = document.getElementById('taskContainer');
-    const taskForm = document.getElementById('taskForm');
+  const taskTitle = document.getElementById('taskTitle');
+  const taskDateTime = document.getElementById('taskDateTime');
+  const filterSelect = document.getElementById('filterSelect');
+  const taskContainer = document.getElementById('taskContainer');
+  const taskForm = document.getElementById('taskForm');
 
-    const tasks = [];
+  const tasks = [];
 
-    function updateDateTime() {
-        const now = new Date();
-        const hours = now.getHours();
-        const minutes = now.getMinutes().toString().padStart(2, '0');
-        const ampm = hours < 12 ? 'AM' : 'PM';
-        const hour12 = hours % 12 || 12;
-        const greeting = hours < 12 ? 'Good morning ☀' : 'Good night ⭐';
+  function setOneHourLater() {
+    const now = new Date();
+    now.setHours(now.getHours() + 1);
 
-        document.getElementById('greeting').textContent = greeting;                                         
-        document.getElementById('date').textContent = now.toLocaleDateString('en-UK', {
-            weekday: 'long', day: 'numeric', month: 'numeric', year: 'numeric'
-        });
-        document.getElementById('time').textContent = `${hour12}:${minutes} ${ampm}`;
-        taskDateTime.value = new Date(Date.now() + 60 * 60 * 1000).toISOString().slice(0, 16);
-    }
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
 
-    updateDateTime();
+    // Fix: wrap in backticks for proper template literal
+    const localDatetime = `${year}-${month}-${day}T${hours}:${minutes}`;
+    document.getElementById('taskDateTime').value = localDatetime;
+  }
 
-    function renderTasks() {
-        taskContainer.innerHTML = '';
+  const deleteModal = document.getElementById('deleteModal');
+  const confirmDelete = document.getElementById('confirmDelete');
+  const cancelDelete = document.getElementById('cancelDelete');
+  const modalText = document.getElementById('modalText');
 
-        const filteredTasks = tasks.filter(task => {
-            if (filterSelect.value === 'Today') {
-                const taskDate = new Date(task.assignedDate);
-                const today = new Date();
-                return taskDate.toDateString() === today.toDateString();
-            }
-            return true;
-        });
+  let taskToDelete = null;
 
-        const notDone = filteredTasks.filter(t => !t.isDone);
-        const done = filteredTasks.filter(t => t.isDone);
+  function showDeleteModal(task) {
+    taskToDelete = task;
+    // Fix: wrap the string in backticks to use template literals
+    modalText.textContent = `Are you sure you want to delete the task: "${task.title}"?`;
+    deleteModal.style.display = 'flex';
+  }
 
-        if (filteredTasks.length === 0) {
-            taskContainer.innerHTML = `
-                <div class="empty-state">
-                    There are no tasks
-                    <img src="/noTask.svg" alt="No Tasks" />
-                </div>
-            `;
-            return;
-        }
+  function hideDeleteModal() {
+    deleteModal.style.display = 'none';
+    taskToDelete = null;
+  }
 
-        if (notDone.length) {
-            taskContainer.innerHTML += `<div class="section-title">The not completed tasks 🫵👇:</div>`;
-            const ul = document.createElement('ul');
-            ul.className = 'task-list';
-            notDone.forEach(task => ul.appendChild(createTaskItem(task)));
-            taskContainer.appendChild(ul);
-        }
-
-        if (done.length) {
-            taskContainer.innerHTML += `<div class="section-title">The completed tasks 👏✨:</div>`;
-            const ul = document.createElement('ul');
-            ul.className = 'task-list';
-            done.forEach(task => ul.appendChild(createTaskItem(task)));
-            taskContainer.appendChild(ul);
-        }
-    }
-
-    function createTaskItem(task) {
-        const li = document.createElement('li');
-        li.className = `task-card ${task.isDone ? 'done' : ''}`;
-
-        const left = document.createElement('div');
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.className = 'checkbox';
-        checkbox.checked = task.isDone;
-        checkbox.onchange = () => {
-            task.isDone = checkbox.checked;
-            renderTasks();
-        };
-
-        const span = document.createElement('span');
-        span.textContent = ' ' + task.title;
-
-        left.appendChild(checkbox);
-        left.appendChild(span);
-
-        const right = document.createElement('div');
-        const timeButton = document.createElement('button');
-        timeButton.className = 'btn';
-        timeButton.textContent = timeAgo(task.assignedDate);
-
-        const delButton = document.createElement('button');
-        delButton.className = 'btn';
-        delButton.textContent = '🗑';
-        delButton.onclick = () => {
-            if (confirm(`Are you sure you want to delete the task: "${task.title}"?`)) {
-                const index = tasks.indexOf(task);
-                tasks.splice(index, 1);
-                renderTasks();
-            }
-        };
-
-        right.appendChild(timeButton);
-        right.appendChild(delButton);
-
-        li.appendChild(left);
-        li.appendChild(right);
-
-        return li;
-    }
-
-    function timeAgo(date) {
-        const now = new Date();
-        const diff = Math.round((new Date(date) - now) / 1000);
-        const absDiff = Math.abs(diff);
-
-        if (absDiff < 60) return 'Just now';
-        if (absDiff < 3600) return `${Math.floor(absDiff / 60)} min ${diff < 0 ? 'ago' : 'left'}`;
-        if (absDiff < 86400) return `${Math.floor(absDiff / 3600)} hr ${diff < 0 ? 'ago' : 'left'}`;
-        return new Date(date).toLocaleDateString();
-    }
-
-    taskForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const title = taskTitle.value.trim();
-        const datetime = taskDateTime.value;
-
-        if (title === '' || !datetime) return;
-
-        tasks.push({
-            title,
-            assignedDate: datetime,
-            isDone: false
-        });
-
-        tasks.sort((a, b) => new Date(a.assignedDate) - new Date(b.assignedDate));
-
-        taskTitle.value = '';
-        updateDateTime();
+  confirmDelete.onclick = () => {
+    if (taskToDelete) {
+      const index = tasks.indexOf(taskToDelete);
+      if (index !== -1) {
+        tasks.splice(index, 1);
         renderTasks();
+      }
+    }
+    hideDeleteModal();
+  };
+
+  cancelDelete.onclick = hideDeleteModal;
+
+  function updateDateTime() {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const ampm = hours < 12 ? 'AM' : 'PM';
+    const hour12 = hours % 12 || 12;
+    const greeting = hours < 12 ? 'Good morning ☀' : 'Good night ⭐';
+
+    document.getElementById('greeting').textContent = greeting;
+    document.getElementById('date').textContent = now.toLocaleDateString('en-UK', {
+      weekday: 'long', day: 'numeric', month: 'numeric', year: 'numeric'
+    });
+    // Fix: use backticks to output the time string.
+    document.getElementById('time').textContent = `${hour12}:${minutes} ${ampm}`;
+    setOneHourLater();
+  }
+
+  updateDateTime();
+
+  function renderTasks() {
+    taskContainer.innerHTML = '';
+
+    const filteredTasks = tasks.filter(task => {
+      if (filterSelect.value === 'Today') {
+        const taskDate = new Date(task.assignedDate);
+        const today = new Date();
+        return taskDate.toDateString() === today.toDateString();
+      }
+      return true;
     });
 
-    filterSelect.addEventListener('change', renderTasks);
+    const notDone = filteredTasks.filter(t => !t.isDone);
+    const done = filteredTasks.filter(t => t.isDone);
 
+    if (filteredTasks.length == 0) {
+      taskContainer.innerHTML = `
+        <div class="empty-state">
+          <img style="height:30%; width:30%" src="noTask.svg" alt="No Task"/>
+        </div>
+      `;
+      return;
+    }
+
+    if (notDone.length > 0) {
+      const notDoneTitle = document.createElement('div');
+      notDoneTitle.className = 'section-title';
+      notDoneTitle.textContent = 'The not completed tasks 🫵👇:';
+      taskContainer.appendChild(notDoneTitle);
+
+      const ul = document.createElement('ul');
+      ul.className = 'task-list';
+
+      notDone.forEach(task => {
+        const li = createTaskItem(task);
+        ul.appendChild(li);
+      });
+
+      taskContainer.appendChild(ul);
+    }
+
+    if (done.length > 0) {
+      const doneTitle = document.createElement('div');
+      doneTitle.className = 'section-title';
+      doneTitle.textContent = 'The completed tasks 👏✨:';
+      taskContainer.appendChild(doneTitle);
+
+      const ul = document.createElement('ul');
+      ul.className = 'task-list';
+
+      done.forEach(task => {
+        const li = createTaskItem(task);
+        li.classList.add('done');
+        ul.appendChild(li);
+      });
+
+      taskContainer.appendChild(ul);
+    }
+  }
+
+  function createTaskItem(task) {
+    const li = document.createElement('li');
+    // Fix: wrap in backticks for template literal interpolation
+    li.className = `task-card ${task.isDone ? 'done' : ''}`;
+
+    const left = document.createElement('div');
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.className = 'checkbox';
+    checkbox.checked = task.isDone;
+    checkbox.onchange = () => {
+      task.isDone = checkbox.checked;
+      renderTasks();
+    };
+
+    const span = document.createElement('span');
+    span.textContent = ' ' + task.title;
+
+    left.appendChild(checkbox);
+    left.appendChild(span);
+
+    const right = document.createElement('div');
+    const timeButton = document.createElement('button');
+    timeButton.className = 'btn';
+    timeButton.textContent = timeAgo(task.assignedDate);
+
+    const delButton = document.createElement('button');
+    delButton.className = 'btn';
+    delButton.textContent = '🗑';
+    // Fix: directly attach the onclick handler without extra wrapping
+    delButton.onclick = () => {
+      showDeleteModal(task);
+    };
+
+    right.appendChild(timeButton);
+    right.appendChild(delButton);
+
+    li.appendChild(left);
+    li.appendChild(right);
+
+    return li;
+  }
+
+  function timeAgo(date) {
+    const now = new Date();
+    const diff = Math.round((new Date(date) - now) / 1000);
+    const absDiff = Math.abs(diff);
+
+    if (absDiff < 60) return 'Just now';
+    // Fix: use template literals for string interpolation
+    if (absDiff < 3600) return `${Math.floor(absDiff / 60)} min ${diff < 0 ? 'ago' : 'left'}`;
+    if (absDiff < 86400) return `${Math.floor(absDiff / 3600)} hr ${diff < 0 ? 'ago' : 'left'}`;
+    return new Date(date).toLocaleDateString();
+  }
+
+  taskForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const title = taskTitle.value.trim();
+    const datetime = taskDateTime.value;
+
+    if (title === '' || !datetime) return;
+
+    tasks.push({
+      title,
+      assignedDate: datetime,
+      isDone: false
+    });
+
+    tasks.sort((a, b) => new Date(a.assignedDate) - new Date(b.assignedDate));
+
+    taskTitle.value = '';
+    setOneHourLater();
     renderTasks();
+  });
+
+  filterSelect.addEventListener('change', renderTasks);
+
+  renderTasks();
 </script>
 
 </body>
