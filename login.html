@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login & Signup</title>
+  <style>
+    /* Overall body styling */
+    body {
+      background-color: #fefae0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 1rem;
+    }
+    
+    /* Card styling: for login and signup forms */
+    .card {
+      background-color: white;
+      width: 370px;
+      max-width: 100%;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    
+    /* Input group to add spacing between inputs */
+    .input-group {
+      text-align: left;  /* Align error messages to the left too */
+      margin-bottom: 1.5rem;
+    }
+    
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #f5f5f5;
+      font-size: 14px;
+      transition: border 0.3s ease, box-shadow 0.3s ease;
+      box-sizing: border-box;
+    }
+    
+    input:hover,
+    input:focus {
+      border-color: #facc15;
+      box-shadow: 0 0 5px rgba(250, 204, 21, 0.5);
+      outline: none;
+    }
+    
+    /* Error messages: left aligned, with spacing below */
+    .error {
+      color: red;
+      font-size: 0.85rem;
+      margin-top: 0.3rem;
+      margin-bottom: 0.5rem;
+      text-align: left;
+      display: none;
+    }
+    
+    button {
+      width: 100%;
+      background-color: #facc15;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      margin-top: 1rem;
+    }
+    
+    button:hover {
+      background-color: #eab308;
+      box-shadow: 0 2px 10px rgba(234, 179, 8, 0.5);
+    }
+    
+    .toggle {
+      margin-top: 1rem;
+      font-size: 14px;
+    }
+    
+    .toggle span {
+      color: #1d4ed8;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    .toggle span:hover {
+      text-decoration: underline;
+    }
+    
+    /* Forgot Password styling */
+    .forgot {
+      text-align: left;
+      margin-bottom: 1.5rem;
+    }
+/* Profile page styling for desktop and responsiveness */
+.profile {
+  width: 100%;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+}
+
+.hidden {
+  display: none;
+}
+.profile-container {
+  width: 600%;
+  max-width: 1200px; /* Increased container width for desktop */
+  margin: 30px auto;
+  padding: 50px;     /* Increased overall padding */
+  background-color: rgb(255, 255, 255);
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  
+  /* Arrange content vertically with space between items */
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Logo styling similar to a header */
+.logo {
+  text-align: center;
+  font-size: 2.8rem;
+  font-weight: bold;
+  color: #eab308;
+  margin-bottom: 20px;
+  background-color: #ffffff;
+  min-height: 90px; /* Ensures the logo is at least 80px tall */
+  line-height: 80px; /* Centering the text vertically if desired */
+}
+
+.logo span {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: normal;
+  color: #c00d0d;
+  font-style: italic;
+  margin-top: -5px;
+  
+}
+
+/* Profile card styling with increased spacing */
+.profile-card {
+  width: 100%;
+  max-width: 800px;  /* Card will never be wider than 800px on larger screens */
+  min-width: 320px;  /* Card will not shrink below 320px on smaller screens */
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.user-section{
+    background-color: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+.task-stats{
+background-color: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+.icon-container{
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+.icon-circle{
+    background-color: white;
+    color: black;
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+
+/* User info styling */
+.user-info {
+  text-align: left;
+  width: 100%;
+}
+.user-info h2 {
+  margin: 10px 0 20px;
+  font-size: 2.2rem;
+  color: #1f2937;
+}
+
+/* Increased bottom margin for about section to separate it from tasks/programs */
+.about {
+  font-size: 1.1rem;
+  color: #666;
+  margin: 10px 0 20px;
+}
+
+.tasks {
+  margin-top: 40px;
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin-bottom: 20px;
+}
+
+.tasks p {
+  margin: 5px 0;
+}
+
+
+/* Highlights section styling */
+.highlights {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+  background-color: #fef9c3;
+  border-radius: 10px;
+  padding: 1.5rem;
+}
+.highlight {
+    height: 60px;
+  text-align: center;
+  flex: 1;
+  margin: 0 10px;
+  background-color: #fff7d4;
+  padding: 15px;
+  border-radius: 10px;
+}
+.highlight p {
+  margin: 0 0 5px 0;
+  font-size: 1rem;
+  color: #1f2937;
+  font-weight: bold;
+}
+.highlight span {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #1f2937;
+}
+
+/* Logout Button Design */
+.logout-btn {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background-color: #FACC15;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-top: 2rem;
+  transition: background-color 0.3s ease;
+}
+.logout-btn:hover {
+background-color: #eab308;
+ box-shadow: 0 2px 10px rgba(234, 179, 8, 0.5);
+}
+
+/* Utility class to hide elements */
+.hidden {
+  display: none;
+}
+
+/* RESPONSIVE STYLES */
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 2rem;
+    max-width: 90%;
+  }
+  
+  .logo {
+    font-size: 2.5rem;
+  }
+  
+  .user-info h2 {
+    font-size: 1.8rem;
+  }
+  
+  .about,
+  .about span {
+    font-size: 0.9rem;
+  }
+  
+  .programs {
+    font-size: 14px;
+  }
+  
+  .highlights {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .highlight {
+    margin: 0;
+    border-right: none;
+    margin-bottom: 1rem;
+  }
+}
+
+
+/* RESPONSIVE STYLES */
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 2rem;
+    max-width: 90%;
+  }
+  
+  .logo {
+    font-size: 28px;
+  }
+  
+  .user-info h2 {
+    font-size: 1.8rem;
+  }
+  
+  .about,
+  .about span {
+    font-size: 0.9rem;
+  }
+  
+  .programs {
+    font-size: 14px;
+  }
+  
+  .highlights {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .highlight {
+    margin: 0;
+    border-right: none;
+    margin-bottom: 1rem;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Login Form (visible on page load) -->
+  <div id="loginCard" class="card">
+    <h2>Login</h2>
+    <div class="input-group">
+      <input type="email" id="loginEmail" placeholder="Enter Email" required>
+      <div id="loginEmailError" class="error">Email is required</div>
+    </div>
+    <div class="input-group">
+      <input type="password" id="loginPassword" placeholder="Enter Password" required>
+      <div id="loginPasswordError" class="error">Password is required</div>
+    </div>
+    <!-- Forgot Password option -->
+    <div class="forgot">
+      <a href="#" onclick="forgotPassword()">Forgot Password?</a>
+    </div>
+    <button onclick="handleLogin()">Login</button>
+    <div class="toggle">
+      Don't have an account? <span onclick="toggleForm('signup')">Sign Up</span>
+    </div>
+  </div>
+  
+  <!-- Signup Form (hidden by default) -->
+  <div id="signupCard" class="card hidden">
+  <h2>Sign Up</h2>
+  <div class="input-group">
+    <input type="text" id="signupName" placeholder="Enter Name" required>
+    <div id="signupNameError" class="error">Name is required</div>
+  </div>
+  <div class="input-group">
+    <input type="email" id="signupEmail" placeholder="Enter Email" required>
+    <div id="signupEmailError" class="error">Email is required</div>
+  </div>
+  <div class="input-group">
+    <input type="password" id="signupPassword" placeholder="Enter Password" required>
+    <div id="signupPasswordError" class="error">Password is required</div>
+  </div>
+  <!-- New Confirm Password Input -->
+  <div class="input-group">
+    <input type="password" id="signupConfirmPassword" placeholder="Confirm Password" required>
+    <div id="signupConfirmPasswordError" class="error">Confirm Password is required</div>
+  </div>
+  <button onclick="handleSignup()">Sign Up</button>
+  <div class="toggle">
+    Already have an account? <span onclick="toggleForm('login')">Login</span>
+  </div>
+</div>
+
+  
+  <!-- Profile Page (hidden by default) -->
+  
+  <!-- Profile Page -->
+  <div id="profilePage" class="profile hidden">
+    <div id="profile-container">
+      <div class="profile-card">
+        <div class="logo">ToDone</div>
+        <div class="icon-container">
+            <div class="icon-circle">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" 
+             viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" 
+                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" 
+                d="M4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/>
+        </svg>
+        </div>
+        </div>
+          <div class="user-section">
+        <div class="user-info">
+          <h2 id="profileName">nada</h2>
+          <p class="about">About me<br><span>none</span></p>
+        </div>
+        </div>
+        <div class="task-stats">
+        <div class="tasks">
+          <p>Tasks Completed: <strong>43</strong></p>
+          <p>Current Focus: <strong>idk for now</strong></p>
+        </div>
+        <div class="highlights">
+          <div class="highlight">
+            <p>Overdue Tasks</p>
+            <span>-</span>
+          </div>
+          <div class="highlight">
+            <p>Completed Today</p>
+            <span>-</span>
+          </div>
+          <div class="highlight">
+            <p>Total Tasks</p>
+            <span>-</span>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="logout-btn" onclick="toggleForm('login')">Logout</a>
+</div>
+  
+ <script>
+  // Validate email using a regular expression.
+  function validateEmail(email) {
+    var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  }
+  
+  // Validate password strength: minimum 8 characters, at least one uppercase, one lowercase, and one digit.
+  // (Used only for signup)
+  function validatePassword(password) {
+    var re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    return re.test(password);
+  }
+  
+  // Toggle visibility of login, signup, and profile pages.
+  function toggleForm(to) {
+    var loginCard = document.getElementById('loginCard');
+    var signupCard = document.getElementById('signupCard');
+    var profilePage = document.getElementById('profilePage');
+    
+    if (to === 'login') {
+      loginCard.classList.remove('hidden');
+      signupCard.classList.add('hidden');
+      profilePage.classList.add('hidden');
+    } else if (to === 'signup') {
+      loginCard.classList.add('hidden');
+      signupCard.classList.remove('hidden');
+      profilePage.classList.add('hidden');
+    } else if (to === 'profile') {
+      loginCard.classList.add('hidden');
+      signupCard.classList.add('hidden');
+      profilePage.classList.remove('hidden');
+    }
+  }
+  
+  // Function to display error messages.
+  // id: element ID, message: error text, show: boolean
+  function showError(id, message, show) {
+    var errorEl = document.getElementById(id);
+    errorEl.textContent = message;
+    errorEl.style.display = show ? "block" : "none";
+  }
+  
+  // Handle login: validate email and that a password is provided.
+  function handleLogin() {
+    var email = document.getElementById('loginEmail').value.trim();
+    var pass  = document.getElementById('loginPassword').value.trim();
+    var valid = true;
+    
+    if (!email) {
+      showError('loginEmailError', "Email is required", true);
+      valid = false;
+    } else if (!validateEmail(email)) {
+      showError('loginEmailError', "Enter a valid email", true);
+      valid = false;
+    } else {
+      showError('loginEmailError', "", false);
+    }
+    
+    // For login, we check only that a password was entered.
+    if (!pass) {
+      showError('loginPasswordError', "Password is required", true);
+      valid = false;
+    } else {
+      showError('loginPasswordError', "", false);
+    }
+    
+    if (!valid) return;
+    
+    // On successful login (server-side validation would occur in production),
+    // the profile view is displayed.
+    toggleForm('profile');
+  }
+  
+  // Handle signup: validate all inputs and enforce the strong password requirement along with confirmation.
+  function handleSignup() {
+    var name         = document.getElementById('signupName').value.trim();
+    var email        = document.getElementById('signupEmail').value.trim();
+    var pass         = document.getElementById('signupPassword').value.trim();
+    var confirmPass  = document.getElementById('signupConfirmPassword').value.trim();
+    var valid        = true;
+    
+    // Validate name.
+    if (!name) {
+      showError('signupNameError', "Name is required", true);
+      valid = false;
+    } else {
+      showError('signupNameError', "", false);
+    }
+    
+    // Validate email.
+    if (!email) {
+      showError('signupEmailError', "Email is required", true);
+      valid = false;
+    } else if (!validateEmail(email)) {
+      showError('signupEmailError', "Enter a valid email", true);
+      valid = false;
+    } else {
+      showError('signupEmailError', "", false);
+    }
+    
+    // Validate password.
+    if (!pass) {
+      showError('signupPasswordError', "Password is required", true);
+      valid = false;
+    } else if (!validatePassword(pass)) {
+      showError('signupPasswordError', "Password must be at least 8 characters with uppercase, lowercase, and a number", true);
+      valid = false;
+    } else {
+      showError('signupPasswordError', "", false);
+    }
+    
+    // Validate confirm password.
+    if (!confirmPass) {
+      showError('signupConfirmPasswordError', "Confirm Password is required", true);
+      valid = false;
+    } else if (pass !== confirmPass) {
+      showError('signupConfirmPasswordError', "Passwords do not match", true);
+      valid = false;
+    } else {
+      showError('signupConfirmPasswordError', "", false);
+    }
+    
+    if (!valid) return;
+    
+    // On successful signup, update the profile info and display the profile page.
+    document.getElementById('profileName').textContent = name;
+    toggleForm('profile');
+  }
+  
+  // Simple simulation for forgot password functionality.
+  function forgotPassword() {
+    alert("Forgot Password functionality is not implemented.");
+  }
+</script>
+
+
+</body>
+</html>

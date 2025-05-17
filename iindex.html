@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Manager</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #fefce8;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            background-color: #facc15;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn:disabled {
+            background-color: #fef08a;
+            cursor: not-allowed;
+        }
+
+        .task-card {
+            background-color: #fff7d6;
+            padding: 1rem;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .task-card.done {
+            background-color: #e2e8f0;
+            text-decoration: line-through;
+        }
+
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checkbox {
+            width: 1.2rem;
+            height: 1.2rem;
+            accent-color: #facc15;
+        }
+
+        .section-title {
+            margin: 1.5rem 0 0.5rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        input[type="text"], input[type="datetime-local"], select {
+            padding: 0.5rem;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            min-width: 200px;
+        }
+
+        .empty-state {
+            text-align: center;
+            margin-top: 4rem;
+            font-size: 1.2rem;
+            opacity: 0.7;
+        }
+
+        .empty-state img {
+            width: 100px;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div>
+        <h1 id="greeting"></h1>
+        <h2 id="date"></h2>
+        <h3 id="time"></h3>
+    </div>
+    <div>
+        <select id="filterSelect" class="btn">
+            <option value="All">All</option>
+            <option value="Today">Today</option>
+        </select>
+    </div>
+</header>
+
+<form id="taskForm" class="form-group">
+    <input type="text" id="taskTitle" placeholder="The task title." required />
+    <input type="datetime-local" id="taskDateTime" />
+    <button type="submit" class="btn">Submit</button>
+</form>
+
+<div id="taskContainer">
+    <!-- Rendered tasks will appear here -->
+</div>
+
+<script>
+    const taskTitle = document.getElementById('taskTitle');
+    const taskDateTime = document.getElementById('taskDateTime');
+    const filterSelect = document.getElementById('filterSelect');
+    const taskContainer = document.getElementById('taskContainer');
+    const taskForm = document.getElementById('taskForm');
+
+    const tasks = [];
+
+    function updateDateTime() {
+        const now = new Date();
+        const hours = now.getHours();
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const ampm = hours < 12 ? 'AM' : 'PM';
+        const hour12 = hours % 12 || 12;
+        const greeting = hours < 12 ? 'Good morning ☀' : 'Good night ⭐';
+
+        document.getElementById('greeting').textContent = greeting;                                         
+        document.getElementById('date').textContent = now.toLocaleDateString('en-UK', {
+            weekday: 'long', day: 'numeric', month: 'numeric', year: 'numeric'
+        });
+        document.getElementById('time').textContent = `${hour12}:${minutes} ${ampm}`;
+        taskDateTime.value = new Date(Date.now() + 60 * 60 * 1000).toISOString().slice(0, 16);
+    }
+
+    updateDateTime();
+
+    function renderTasks() {
+        taskContainer.innerHTML = '';
+
+        const filteredTasks = tasks.filter(task => {
+            if (filterSelect.value === 'Today') {
+                const taskDate = new Date(task.assignedDate);
+                const today = new Date();
+                return taskDate.toDateString() === today.toDateString();
+            }
+            return true;
+        });
+
+        const notDone = filteredTasks.filter(t => !t.isDone);
+        const done = filteredTasks.filter(t => t.isDone);
+
+        if (filteredTasks.length === 0) {
+            taskContainer.innerHTML = `
+                <div class="empty-state">
+                    There are no tasks
+                    <img src="/noTask.svg" alt="No Tasks" />
+                </div>
+            `;
+            return;
+        }
+
+        if (notDone.length) {
+            taskContainer.innerHTML += `<div class="section-title">The not completed tasks 🫵👇:</div>`;
+            const ul = document.createElement('ul');
+            ul.className = 'task-list';
+            notDone.forEach(task => ul.appendChild(createTaskItem(task)));
+            taskContainer.appendChild(ul);
+        }
+
+        if (done.length) {
+            taskContainer.innerHTML += `<div class="section-title">The completed tasks 👏✨:</div>`;
+            const ul = document.createElement('ul');
+            ul.className = 'task-list';
+            done.forEach(task => ul.appendChild(createTaskItem(task)));
+            taskContainer.appendChild(ul);
+        }
+    }
+
+    function createTaskItem(task) {
+        const li = document.createElement('li');
+        li.className = `task-card ${task.isDone ? 'done' : ''}`;
+
+        const left = document.createElement('div');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'checkbox';
+        checkbox.checked = task.isDone;
+        checkbox.onchange = () => {
+            task.isDone = checkbox.checked;
+            renderTasks();
+        };
+
+        const span = document.createElement('span');
+        span.textContent = ' ' + task.title;
+
+        left.appendChild(checkbox);
+        left.appendChild(span);
+
+        const right = document.createElement('div');
+        const timeButton = document.createElement('button');
+        timeButton.className = 'btn';
+        timeButton.textContent = timeAgo(task.assignedDate);
+
+        const delButton = document.createElement('button');
+        delButton.className = 'btn';
+        delButton.textContent = '🗑';
+        delButton.onclick = () => {
+            if (confirm(`Are you sure you want to delete the task: "${task.title}"?`)) {
+                const index = tasks.indexOf(task);
+                tasks.splice(index, 1);
+                renderTasks();
+            }
+        };
+
+        right.appendChild(timeButton);
+        right.appendChild(delButton);
+
+        li.appendChild(left);
+        li.appendChild(right);
+
+        return li;
+    }
+
+    function timeAgo(date) {
+        const now = new Date();
+        const diff = Math.round((new Date(date) - now) / 1000);
+        const absDiff = Math.abs(diff);
+
+        if (absDiff < 60) return 'Just now';
+        if (absDiff < 3600) return `${Math.floor(absDiff / 60)} min ${diff < 0 ? 'ago' : 'left'}`;
+        if (absDiff < 86400) return `${Math.floor(absDiff / 3600)} hr ${diff < 0 ? 'ago' : 'left'}`;
+        return new Date(date).toLocaleDateString();
+    }
+
+    taskForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const title = taskTitle.value.trim();
+        const datetime = taskDateTime.value;
+
+        if (title === '' || !datetime) return;
+
+        tasks.push({
+            title,
+            assignedDate: datetime,
+            isDone: false
+        });
+
+        tasks.sort((a, b) => new Date(a.assignedDate) - new Date(b.assignedDate));
+
+        taskTitle.value = '';
+        updateDateTime();
+        renderTasks();
+    });
+
+    filterSelect.addEventListener('change', renderTasks);
+
+    renderTasks();
+</script>
+
+</body>
+</html>
