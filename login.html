@@ -235,25 +235,23 @@ background-color: white;
   padding: 1.5rem;
 }
 .highlight {
-    height: 60px;
+  height: 60px;
   text-align: center;
   flex: 1;
-  margin: 0 10px;
+  margin: 0 5px;
   background-color: #fff7d4;
-  padding: 15px;
+  padding: 10px;
   border-radius: 10px;
 }
 .highlight p {
-  margin: 0 0 5px 0;
+  margin: 0;
   font-size: 1rem;
-  color: #1f2937;
-  font-weight: bold;
+  color: #3f3f3f;
 }
 .highlight span {
   display: block;
   margin-top: 0.5rem;
-  font-size: 1.3rem;
-  font-weight: bold;
+  font-size: 1rem;
   color: #1f2937;
 }
 
@@ -480,29 +478,29 @@ background-color: #eab308;
         </div>
           <div class="user-section">
         <div class="user-info">
-          <h2 id="profileName">nada</h2>
-          <p class="about">About me<br><span>none</span></p>
+          <h2 id="profileName"></h2>
+          <p class="about"><br><span>Every checklist starts with one task</span></p>
         </div>
         </div>
         <div class="task-stats">
         <div class="tasks">
-          <p>Tasks Completed: <strong></strong></p>
-          <p>Current Focus: <strong>idk for now</strong></p>
+          <p>Tasks Completed <strong></strong></p>
+          <p>Current Focus <strong>idk for now</strong></p>
         </div>
         <div class="highlights">
           <div class="highlight">
            <ul>
-            <li><strong>Overdue Tasks:</strong> <span id ="overdueTasks">0</span></li>
+           <p>Not Completed Tasks <span id ="notCompletedTasks">0</span></p>
            </ul>
           </div>
           <div class="highlight">
             <ul>
-            <li><strong>Completed Tasks:</strong> <span id ="completedTasks">0</span></li>
+           <p>Completed Tasks <span id ="completedTasks">0</span></p>
            </ul>
           </div>
           <div class="highlight">
             <ul>
-            <li><strong>Total Tasks:</strong> <span id ="totalTasks">0</span></li>
+           <p>Total Tasks <span id ="totalTasks">0</span></p>
            </ul>
           </div>
         </div>
@@ -529,26 +527,78 @@ background-color: #eab308;
     </button>
     </a>
 </footer>
- <script>
-  // Validate email using a regular expression.
+
+<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+
+<!-- Include Firebase Authentication -->
+<script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+
+<!-- Optionally include Cloud Firestore if you plan to store user data -->
+<script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+<!-- Include Firebase Analytics if needed -->
+<script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-analytics.js"></script>
+
+<script type="module">
+  import {
+    initializeApp
+  } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+  import {
+    getAnalytics
+  } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-analytics.js";
+  import { updateProfile } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCPDpM9rCGcQeoN7SelbV5KnUfmuxo93Ic",
+    authDomain: "todone-1.firebaseapp.com",
+    projectId: "todone-1",
+    storageBucket: "todone-1.firebaseapp.com",
+    messagingSenderId: "996857801640",
+    appId: "1:996857801640:web:50a89a0e27ed480c54cb9d",
+    measurementId: "G-B579H9H6LR"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const analytics = getAnalytics(app);
+
+   onAuthStateChanged(auth, (user) => {
+  if (authChecked) return; // نتأكد ما نعيد التوجيه
+  authChecked = true;
+
+  if (user) {
+    document.getElementById('profileName').textContent = user.displayName || user.email;
+    toggleForm('profile');
+  } else {
+    toggleForm('login');
+  }
+});
+
+
+  let authChecked = false;
+
   function validateEmail(email) {
     var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
   }
-  
-  // Validate password strength: minimum 8 characters, at least one uppercase, one lowercase, and one digit.
-  // (Used only for signup)
+
   function validatePassword(password) {
     var re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
     return re.test(password);
   }
-  
-  // Toggle visibility of login, signup, and profile pages.
+
   function toggleForm(to) {
     var loginCard = document.getElementById('loginCard');
     var signupCard = document.getElementById('signupCard');
     var profilePage = document.getElementById('profilePage');
-    
+
     if (to === 'login') {
       loginCard.classList.remove('hidden');
       signupCard.classList.add('hidden');
@@ -563,137 +613,20 @@ background-color: #eab308;
       profilePage.classList.remove('hidden');
     }
   }
-  
-  // Function to display error messages.
-  // id: element ID, message: error text, show: boolean
+
   function showError(id, message, show) {
     var errorEl = document.getElementById(id);
     errorEl.textContent = message;
     errorEl.style.display = show ? "block" : "none";
   }
-  var names = ["nada", "joud", "raghad", "shujon"];
-  var emails = ["nada@gmail.com", "joud@gmail.com", "raghad@gmail.com", "shujon@gmail.com"];
-  var passwords = ["Nada1234", "Joud1234", "Raghad1234", "Shujon1234"];
-  function addAccount(name, email, password) {
-  if (names.length >= 100) {
-    console.log("Account capacity reached!");
-    return;
-  }
-  let tasks=[];
-  names.push(name);
-  emails.push(email);
-  passwords.push(password);
-}
 
-function updateTaskStats() {
-const userTasks = tasks[currentUserIndex];
-const total = userTasks.length;
-const completed = userTasks.filter(task => task.isCompleted).length;
-const overdue = userTasks.filter(task => {
-const dueDate = new Date(task.due);
-const now = new Date();
-return !task.isCompleted && dueDate < now;
-}).length;
-
-document.getElementById('totalTasks').textContent = total;
-document.getElementById('completedTasks').textContent = completed;
-document.getElementById('overdueTasks').textContent = overdue;
-}
-
-  // Handle login: validate email and that a password is provided.
-  function handleLogin() {
-
-  var email = document.getElementById('loginEmail').value.trim().toLowerCase();
-
-  var pass  = document.getElementById('loginPassword').value.trim();
-
-  var valid = true;
-
-
-
-  if (!email) {
-
-    showError('loginEmailError', "Email is required", true);
-
-    valid = false;
-
-  } else if (!validateEmail(email)) {
-
-    showError('loginEmailError', "Enter a valid email", true);
-
-    valid = false;
-
-  } else {
-
-    showError('loginEmailError', "", false);
-
-  }
-
-
-
-  if (!pass) {
-
-    showError('loginPasswordError', "Password is required", true);
-
-    valid = false;
-
-  } else {
-
-    showError('loginPasswordError', "", false);
-
-  }
-
-
-
-  if (!valid) return;
-
-
-
-  // التحقق من وجود الحساب
-
-  var found = false;
-
-  for (var i = 0; i < emails.length; i++) {
-
-    if (emails[i] === email && passwords[i] === pass) {
-
-      document.getElementById('profileName').textContent = names[i];
-
-      found = true;
-
-      break;
-
-    }
-
-  }
-
-
-
-  if (found) {
-  // Clear any previous account error before toggling the form.
-  showError('loginAccountError', "", false);
-  toggleForm('profile');
-  updateTasksStats();
-} else {
-  showError('loginAccountError', "Account does not exist", true);
-}
-
-
-}
-
-
-
-// تعديل دالة التسجيل
-
-function handleSignup() {
-  // Get user input from form elements
+  function handleSignup() {
   var name = document.getElementById('signupName').value.trim();
   var email = document.getElementById('signupEmail').value.trim().toLowerCase();
   var pass = document.getElementById('signupPassword').value.trim();
   var confirmPass = document.getElementById('signupConfirmPassword').value.trim();
   var valid = true;
 
-  // Validate name
   if (!name) {
     showError('signupNameError', "Name is required", true);
     valid = false;
@@ -701,7 +634,6 @@ function handleSignup() {
     showError('signupNameError', "", false);
   }
 
-  // Validate email: presence and format
   if (!email) {
     showError('signupEmailError', "Email is required", true);
     valid = false;
@@ -712,7 +644,6 @@ function handleSignup() {
     showError('signupEmailError', "", false);
   }
 
-  // Validate password: presence and strength
   if (!pass) {
     showError('signupPasswordError', "Password is required", true);
     valid = false;
@@ -723,7 +654,6 @@ function handleSignup() {
     showError('signupPasswordError', "", false);
   }
 
-  // Validate confirm password: presence and matching password
   if (!confirmPass) {
     showError('signupConfirmPasswordError', "Confirm Password is required", true);
     valid = false;
@@ -734,39 +664,88 @@ function handleSignup() {
     showError('signupConfirmPasswordError', "", false);
   }
 
-  // Stop execution if any field is invalid
   if (!valid) return;
 
-  // Check if the account already exists
-  for (var i = 0; i < emails.length; i++) {
-  if (emails[i] === email) {
-    showError('signupAccountError', "Account already exists", true);
-    return;
+  // ✅ هنا الحل: داخل then
+  createUserWithEmailAndPassword(auth, email, pass)
+    .then((userCredential) => {
+      const user = userCredential.user;
+
+      // نحدث اسم المستخدم
+      updateProfile(user, {
+        displayName: name
+      }).then(() => {
+        document.getElementById('profileName').textContent = name;
+        toggleForm('profile');
+      }).catch((error) => {
+        console.error("Error updating profile:", error);
+      });
+
+    })
+    .catch((error) => {
+      showError('signupAccountError', error.message, true);
+    });
+}
+
+
+  function handleLogin() {
+    var email = document.getElementById('loginEmail').value.trim().toLowerCase();
+    var pass = document.getElementById('loginPassword').value.trim();
+    var valid = true;
+
+    if (!email) {
+      showError('loginEmailError', "Email is required", true);
+      valid = false;
+    } else if (!validateEmail(email)) {
+      showError('loginEmailError', "Enter a valid email", true);
+      valid = false;
+    } else {
+      showError('loginEmailError', "", false);
+    }
+
+    if (!pass) {
+      showError('loginPasswordError', "Password is required", true);
+      valid = false;
+    } else {
+      showError('loginPasswordError', "", false);
+    }
+
+    if (!valid) return;
+
+    signInWithEmailAndPassword(auth, email, pass)
+      .then((userCredential) => {
+        var user = userCredential.user;
+        document.getElementById('profileName').textContent = user.email;
+        toggleForm('profile');
+      })
+      .catch((error) => {
+        showError('loginAccountError', error.message, true);
+      });
   }
-}
-// If no duplicate is found, make sure to clear any previous error:
-showError('signupAccountError', "", false);
 
-
-  // Add the new account using dynamic array pushes
-  names.push(name);
-  emails.push(email);
-  passwords.push(pass);
-  tasks.push([]);
-
-  // Update profile information and toggle to the profile view
-  document.getElementById('profileName').textContent = name;
-  toggleForm('profile');
-  updateTasksStats();
+  function logout() {
+  signOut(auth)
+    .then(() => {
+      authChecked = false;
+      toggleForm('login');
+    })
+    .catch((error) => {
+      console.error("Logout error:", error);
+    });
 }
 
-  
-  // Simple simulation for forgot password functionality.
+
   function forgotPassword() {
     alert("Forgot Password functionality is not implemented.");
   }
-</script>
 
+  // 🟢 لازم تربط الدوال في window عشان تشتغل مع onclick في HTML
+  window.toggleForm = toggleForm;
+  window.handleLogin = handleLogin;
+  window.handleSignup = handleSignup;
+  window.logout = logout;
+  window.forgotPassword = forgotPassword;
+</script>
 
 </body>
 </html>
