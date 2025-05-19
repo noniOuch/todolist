@@ -1,192 +1,764 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>To-Do App</title>
-  <link rel="stylesheet" href="style.css" />
-  <script defer src="open.js"></script>
+  <meta charset="UTF-8">
+  <title>Login & Signup</title>
+  <style>
+    /* Overall body styling */
+    body {
+      background-color: #fefae0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 1rem;
+    }
+    
+    /* Card styling: for login and signup forms */
+    .card {
+      background-color: white;
+      width: 370px;
+      max-width: 100%;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    
+    /* Input group to add spacing between inputs */
+    .input-group {
+      text-align: left;  /* Align error messages to the left too */
+      margin-bottom: 1.5rem;
+    }
+    
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #f5f5f5;
+      font-size: 14px;
+      transition: border 0.3s ease, box-shadow 0.3s ease;
+      box-sizing: border-box;
+    }
+    
+    input:hover,
+    input:focus {
+      border-color: #facc15;
+      box-shadow: 0 0 5px rgba(250, 204, 21, 0.5);
+      outline: none;
+    }
+    
+    /* Error messages: left aligned, with spacing below */
+    .error {
+      color: red;
+      font-size: 0.85rem;
+      margin-top: 0.3rem;
+      margin-bottom: 0.5rem;
+      text-align: left;
+      display: none;
+    }
+    
+    button {
+      width: 100%;
+      background-color: #facc15;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      margin-top: 1rem;
+    }
+    
+    button:hover {
+      background-color: #eab308;
+      box-shadow: 0 2px 10px rgba(234, 179, 8, 0.5);
+    }
+    
+    .toggle {
+      margin-top: 1rem;
+      font-size: 14px;
+    }
+    
+    .toggle span {
+      color: #1d4ed8;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    .toggle span:hover {
+      text-decoration: underline;
+    }
+    
+    /* Forgot Password styling */
+    .forgot {
+      text-align: left;
+      margin-bottom: 1.5rem;
+    }
+/* Profile page styling for desktop and responsiveness */
+.profile {
+  width: 100%;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+}
+
+.hidden {
+  display: none;
+}
+.profile-container {
+  width: 600%;
+  max-width: 1200px; /* Increased container width for desktop */
+  margin: 30px auto;
+  padding: 50px;     /* Increased overall padding */
+  background-color: rgb(255, 255, 255);
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  
+  /* Arrange content vertically with space between items */
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Logo styling similar to a header */
+.logo {
+  text-align: center;
+  font-size: 2.8rem;
+  font-weight: bold;
+  color: #eab308;
+  margin-bottom: 20px;
+  background-color: #ffffff;
+  min-height: 90px; /* Ensures the logo is at least 80px tall */
+  line-height: 80px; /* Centering the text vertically if desired */
+}
+
+.logo span {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: normal;
+  color: #c00d0d;
+  font-style: italic;
+  margin-top: -5px;
+  
+}
+
+/* Profile card styling with increased spacing */
+.profile-card {
+  width: 100%;
+  max-width: 800px;  /* Card will never be wider than 800px on larger screens */
+  min-width: 320px;  /* Card will not shrink below 320px on smaller screens */
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.user-section{
+    background-color: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+.task-stats{
+background-color: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+.icon-container{
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+.icon-circle{
+    background-color: white;
+    color: black;
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+
+/* User info styling */
+.user-info {
+  text-align: left;
+  width: 100%;
+}
+.user-info h2 {
+  margin: 10px 0 20px;
+  font-size: 2.2rem;
+  color: #1f2937;
+}
+
+/* Increased bottom margin for about section to separate it from tasks/programs */
+.about {
+  font-size: 1.1rem;
+  color: #666;
+  margin: 10px 0 20px;
+}
+
+.tasks {
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin-bottom: 20px;
+}
+
+.tasks p {
+  margin: 5px 0;
+}
+.notifyBotton{
+  display: flex;
+  justify-content: flex-end;
+}
+.notification-button{
+  width: 10%;
+  height: 10%;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+/* Highlights section styling */
+.highlights {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+  background-color: #fef9c3;
+  border-radius: 10px;
+  padding: 1.5rem;
+}
+.highlight {
+  height: 60px;
+  text-align: center;
+  flex: 1;
+  margin: 0 5px;
+  background-color: #fff7d4;
+  padding: 10px;
+  border-radius: 10px;
+}
+.highlight p {
+  margin: 0;
+  font-size: 1rem;
+  color: #3f3f3f;
+}
+.highlight span {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  color: #1f2937;
+}
+
+/* Logout Button Design */
+.logout-btn {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background-color: #FACC15;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-top: 2rem;
+  transition: background-color 0.3s ease;
+}
+.logout-btn:hover {
+background-color: #eab308;
+ box-shadow: 0 2px 10px rgba(234, 179, 8, 0.5);
+}
+
+/* Utility class to hide elements */
+.hidden {
+  display: none;
+}
+
+/* RESPONSIVE STYLES */
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 2rem;
+    max-width: 90%;
+  }
+  
+  .logo {
+    font-size: 2.5rem;
+  }
+  
+  .user-info h2 {
+    font-size: 1.8rem;
+  }
+  
+  .about,
+  .about span {
+    font-size: 0.9rem;
+  }
+  
+  .programs {
+    font-size: 14px;
+  }
+  
+  .highlights {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .highlight {
+    margin: 0;
+    border-right: none;
+    margin-bottom: 1rem;
+  }
+}
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #fef9c3;
+            display: flex;
+            justify-content: space-around;
+            padding: 0.5rem 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+
+        .nav-btn {
+            background-color: #facc15;
+            border: none;
+            border-radius: 15px;
+            padding: 0.75rem;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-btn svg {
+            stroke: #000;
+        }
+        .navber {
+            position: sticky;
+            top: 0;
+            display: flex;
+            flex-direction:row;
+            justify-content: flex-start;
+            align-items: center;
+            width: 100%;
+            height:70px;
+            background-color: lightgray;
+            border-bottom-left-radius:30px;
+            border-bottom-right-radius: 30px;
+            padding-left: 10px;
+            margin-bottom:20px;
+        }
+
+
+/* RESPONSIVE STYLES */
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 2rem;
+    max-width: 90%;
+  }
+  
+  .logo {
+    font-size: 28px;
+  }
+  
+  .user-info h2 {
+    font-size: 1.8rem;
+  }
+  
+  .about,
+  .about span {
+    font-size: 0.9rem;
+  }
+  
+  .programs {
+    font-size: 14px;
+  }
+  
+  .highlights {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .highlight {
+    margin: 0;
+    border-right: none;
+    margin-bottom: 1rem;
+  }
+  
+}
+
+  </style>
 </head>
 <body>
-  <div class="wrapper">
 
-    
- <!--profile page-->
-<div id="profile-page" class="page">
-  <div class="profile-header">
-    <div class="profile-icon">
-      <span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/>
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/>
-        </svg>
-      </span>
+  <!-- Login Form (visible on page load) -->
+  <div id="loginCard" class="card">
+    <h2>Login</h2>
+    <div class="input-group">
+      <input type="email" id="loginEmail" placeholder="Enter Email" required>
+      <div id="loginEmailError" class="error">Email is required</div>
     </div>
-    <span class="profile-username">user</span>
+    <div class="input-group">
+      <input type="password" id="loginPassword" placeholder="Enter Password" required>
+      <div id="loginPasswordError" class="error">Password is required</div>
+    </div>
+    <!-- Forgot Password option -->
+    <div class="forgot">
+      <a href="#" onclick="forgotPassword()">Forgot Password?</a>
+    </div>
+    <button onclick="handleLogin()">Login</button>
+    <div id ="loginAccountError" class="error" style = "display: none;">Account doesn't exist</div>
+    <div class="toggle">
+      Don't have an account? <span onclick="toggleForm('signup')">Sign Up</span>
+    </div>
   </div>
-
-  <div class="profile-body">
-    <p class="notification-text">If you want to receive daily notification</p>
-
- 
-    <div class="acc-container">
-    <div class="auth-section">
-
-      <!--login-->
-      <div id="sign-in-form">
-        <h2>Sign In</h2>
-        <label for="signin-email">Email</label><br />
-        <input type="email" id="signin-email" placeholder="example9@gmail.com" class="input-field" /><br />
-
-        <label for="signin-password">Password</label><br />
-        <input type="password" id="signin-password" placeholder="password" class="input-field" /><br />
-
-        <button id="signin-button" class="sign-in-button">Sign In</button>
-        <p>
-          Don't have an account? 
-          <a href="#" id="show-signup">Sign Up</a>
-        </p>
-      </div>
-
-      <!--signup-->
-      <div id="sign-up-form" style="display: none;">
-        <h2>Sign Up</h2><br>
-        <label for="username">Username</label><br />
-        <input type="text" id="username" placeholder="username" class="input-field" /><br />
-
-        <label for="signup-email">Email</label><br />
-        <input type="email" id="signup-email" placeholder="example9@gmail.com" class="input-field" /><br />
-
-        <label for="signup-password">Password</label><br />
-        <input type="password" id="signup-password" placeholder="password" class="input-field" /><br />
-
-        <label for="signup-password-confirm">Confirm Password</label><br />
-        <input type="password" id="signup-password-confirm" placeholder="retype password" class="input-field" /><br />
-
-        <button id="signup-button" class="sign-in-button">Sign Up</button>
-        <p>
-          Already have an account? 
-          <a href="#" id="show-signin">Sign In</a>
-        </p>
-      </div>
-    </div>
-    </div>
-
-    <!--profile-->
-    <div id="profile-container" style="display: none;">
-      <div class="logo">ToDone</div>
-      <div class="profile-card">
-        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/>
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/>
-        </svg>
-        <div class="user-info">
-          <h2>nada</h2>
-          <p class="about">About me<br><span>hiii</span></p>
-        </div>
-        <div class="tasks">
-          <p>Tasks Completed: <strong>43</strong></p>
-          <p>Current Focus: <strong>idk for now</strong></p>
-        </div>
-        <div class="highlights">
-          <div class="highlight">
-            <p>Overdue Tasks</p>
-            <span>-</span>
-          </div>
-          <div class="highlight">
-            <p>Completed Today</p>
-            <span>-</span>
-          </div>
-          <div class="highlight">
-            <p>Total Tasks</p>
-            <span>-</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    
-    <div id="auth-message" style="text-align: center; margin-top: 10px;"></div>
+  
+  <!-- Signup Form (hidden by default) -->
+  <div id="signupCard" class="card hidden">
+  <h2>Sign Up</h2>
+  <div class="input-group">
+    <input type="text" id="signupName" placeholder="Enter Name" required>
+    <div id="signupNameError" class="error">Name is required</div>
+  </div>
+  <div class="input-group">
+    <input type="email" id="signupEmail" placeholder="Enter Email" required>
+    <div id="signupEmailError" class="error">Email is required</div>
+  </div>
+  <div class="input-group">
+    <input type="password" id="signupPassword" placeholder="Enter Password" required>
+    <div id="signupPasswordError" class="error">Password is required</div>
+  </div>
+  <!-- New Confirm Password Input -->
+  <div class="input-group">
+    <input type="password" id="signupConfirmPassword" placeholder="Confirm Password" required>
+    <div id="signupConfirmPasswordError" class="error">Confirm Password is required</div>
+  </div>
+  <button onclick="handleSignup()">Sign Up</button>
+  <div id ="signupAccountError" class="error" style = "display: none;">Account doesn't exist</div>
+  <div class="toggle">
+    Already have an account? <span onclick="toggleForm('login')">Login</span>
   </div>
 </div>
 
-
-
-
-
-
-
-
-    <!--tasks page-->
-    <div id="tasks-page" class="page">
-      <div class="top-row">
-        <div class="top-header">
-          <h1 id="greeting"> g</h1>
-          <p id="current-date">32</p>
-          <p id="current-time">10:03 AM</p>
+  
+  <!-- Profile Page (hidden by default) -->
+  
+  <!-- Profile Page -->
+  <div id="profilePage" class="profile hidden">
+    <div id="profile-container">
+      <div class="profile-card">
+        <div class="logo">ToDone</div>
+        <div class="icon-container">
+            <div class="icon-circle">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" 
+             viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" 
+                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" 
+                d="M4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/>
+        </svg>
         </div>
-
-        <div class="controls">
-          <label for="filterOptions">Filter:</label>
-          <select id="filterOptions">
-            <option value="all">All</option>
-            <option value="today">Today</option>
-          </select>
         </div>
-      </div>
-
-       <div class="message"></div>
-
-      <div class="task-input">
-        <input type="text" id = "task-text" placeholder="Add a new task" />
-        <input type="datetime-local" id="due-date">
-        <button id="submit-task">Submit</button>
-      </div>
-
-        <div class="no-tasks" style="display: block; text-align: center;"> <span class="clipboard-icon" style="font-size: 2rem;">🗓️</span>
-        <span class="x-icon" style="font-size: 2rem;">x</span></div>
-        <ul class="task-box"></ul>
-         <div class="container">
-        <div class="divider"></div>
-        <div class="Completed-heading">
-          <h4>Completed Tasks:</h4></div>
-        <div class="completed-box"></div>
+          <div class="user-section">
+        <div class="user-info">
+          <h2 id="profileName"></h2>
+          <p class="about"><br><span>Every checklist starts with one task</span></p>
+        </div>
+        </div>
+        <div class="task-stats">
+        <div class="tasks">
+           <div class="notifyBotton"><button class="notification-button"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5" />
+</svg>
+</button></div>
+          <p>Tasks Completed <strong></strong></p>
+          <p>Current Focus <strong>idk for now</strong></p>
+        </div>
+        <div class="highlights">
+          <div class="highlight">
+           <ul>
+           <p>Not Completed Tasks <span id ="notCompletedTasks">0</span></p>
+           </ul>
+          </div>
+          <div class="highlight">
+            <ul>
+           <p>Completed Tasks <span id ="completedTasks">0</span></p>
+           </ul>
+          </div>
+          <div class="highlight">
+            <ul>
+           <p>Total Tasks <span id ="totalTasks">0</span></p>
+           </ul>
+          </div>
+        </div>
+        </div>
       </div>
     </div>
+    <a href="#" class="logout-btn" onclick="toggleForm('login')">Logout</a>
+</div>
+  <footer class="bottom-nav">
+    <a href="login.html">
+    <button class="nav-btn" >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+        </svg>
+    </button>
+    </a>
+    <a href="iindex.html">
+    <button class="nav-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0 1 18 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3 1.5 1.5 3-3.75" />
+        </svg>
+    </button>
+    </a>
+</footer>
+
+<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+
+<!-- Include Firebase Authentication -->
+<script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+
+<!-- Optionally include Cloud Firestore if you plan to store user data -->
+<script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+<!-- Include Firebase Analytics if needed -->
+<script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-analytics.js"></script>
+
+<script type="module">
+  import {
+    initializeApp
+  } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+  import {
+    getAnalytics
+  } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-analytics.js";
+  import { updateProfile } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCPDpM9rCGcQeoN7SelbV5KnUfmuxo93Ic",
+    authDomain: "todone-1.firebaseapp.com",
+    projectId: "todone-1",
+    storageBucket: "todone-1.firebaseapp.com",
+    messagingSenderId: "996857801640",
+    appId: "1:996857801640:web:50a89a0e27ed480c54cb9d",
+    measurementId: "G-B579H9H6LR"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const analytics = getAnalytics(app);
+
+   onAuthStateChanged(auth, (user) => {
+  if (authChecked) return; // نتأكد ما نعيد التوجيه
+  authChecked = true;
+
+  if (user) {
+    document.getElementById('profileName').textContent = user.displayName || user.email;
+    toggleForm('profile');
+  } else {
+    toggleForm('login');
+  }
+});
 
 
+  let authChecked = false;
+
+  function validateEmail(email) {
+    var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  }
+
+  function validatePassword(password) {
+    var re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    return re.test(password);
+  }
+
+  function toggleForm(to) {
+    var loginCard = document.getElementById('loginCard');
+    var signupCard = document.getElementById('signupCard');
+    var profilePage = document.getElementById('profilePage');
+
+    if (to === 'login') {
+      loginCard.classList.remove('hidden');
+      signupCard.classList.add('hidden');
+      profilePage.classList.add('hidden');
+    } else if (to === 'signup') {
+      loginCard.classList.add('hidden');
+      signupCard.classList.remove('hidden');
+      profilePage.classList.add('hidden');
+    } else if (to === 'profile') {
+      loginCard.classList.add('hidden');
+      signupCard.classList.add('hidden');
+      profilePage.classList.remove('hidden');
+    }
+  }
+
+  function showError(id, message, show) {
+    var errorEl = document.getElementById(id);
+    errorEl.textContent = message;
+    errorEl.style.display = show ? "block" : "none";
+  }
+
+  function handleSignup() {
+  var name = document.getElementById('signupName').value.trim();
+  var email = document.getElementById('signupEmail').value.trim().toLowerCase();
+  var pass = document.getElementById('signupPassword').value.trim();
+  var confirmPass = document.getElementById('signupConfirmPassword').value.trim();
+  var valid = true;
+
+  if (!name) {
+    showError('signupNameError', "Name is required", true);
+    valid = false;
+  } else {
+    showError('signupNameError', "", false);
+  }
+
+  if (!email) {
+    showError('signupEmailError', "Email is required", true);
+    valid = false;
+  } else if (!validateEmail(email)) {
+    showError('signupEmailError', "Enter a valid email", true);
+    valid = false;
+  } else {
+    showError('signupEmailError', "", false);
+  }
+
+  if (!pass) {
+    showError('signupPasswordError', "Password is required", true);
+    valid = false;
+  } else if (!validatePassword(pass)) {
+    showError('signupPasswordError', "Password must be at least 8 characters with uppercase, lowercase, and a number", true);
+    valid = false;
+  } else {
+    showError('signupPasswordError', "", false);
+  }
+
+  if (!confirmPass) {
+    showError('signupConfirmPasswordError', "Confirm Password is required", true);
+    valid = false;
+  } else if (pass !== confirmPass) {
+    showError('signupConfirmPasswordError', "Passwords do not match", true);
+    valid = false;
+  } else {
+    showError('signupConfirmPasswordError', "", false);
+  }
+
+  if (!valid) return;
+
+  // ✅ هنا الحل: داخل then
+  createUserWithEmailAndPassword(auth, email, pass)
+    .then((userCredential) => {
+      const user = userCredential.user;
+
+      // نحدث اسم المستخدم
+      updateProfile(user, {
+        displayName: name
+      }).then(() => {
+        document.getElementById('profileName').textContent = name;
+        toggleForm('profile');
+      }).catch((error) => {
+        console.error("Error updating profile:", error);
+      });
+
+    })
+    .catch((error) => {
+      showError('signupAccountError', error.message, true);
+    });
+}
 
 
+  function handleLogin() {
+    var email = document.getElementById('loginEmail').value.trim().toLowerCase();
+    var pass = document.getElementById('loginPassword').value.trim();
+    var valid = true;
+
+    if (!email) {
+      showError('loginEmailError', "Email is required", true);
+      valid = false;
+    } else if (!validateEmail(email)) {
+      showError('loginEmailError', "Enter a valid email", true);
+      valid = false;
+    } else {
+      showError('loginEmailError', "", false);
+    }
+
+    if (!pass) {
+      showError('loginPasswordError', "Password is required", true);
+      valid = false;
+    } else {
+      showError('loginPasswordError', "", false);
+    }
+
+    if (!valid) return;
+
+    signInWithEmailAndPassword(auth, email, pass)
+      .then((userCredential) => {
+        var user = userCredential.user;
+        document.getElementById('profileName').textContent = user.email;
+        toggleForm('profile');
+      })
+      .catch((error) => {
+        showError('loginAccountError', error.message, true);
+      });
+  }
+
+  function logout() {
+  signOut(auth)
+    .then(() => {
+      authChecked = false;
+      toggleForm('login');
+    })
+    .catch((error) => {
+      console.error("Logout error:", error);
+    });
+}
 
 
+  function forgotPassword() {
+    alert("Forgot Password functionality is not implemented.");
+  }
 
-    <!--calendar page-->
-    <div id="calendar-page" class="page" style="display: none;">
-      <h2>Calendar Page</h2>
-      <p>This is where calendar will be.</p>
-    </div>
+  // 🟢 لازم تربط الدوال في window عشان تشتغل مع onclick في HTML
+  window.toggleForm = toggleForm;
+  window.handleLogin = handleLogin;
+  window.handleSignup = handleSignup;
+  window.logout = logout;
+  window.forgotPassword = forgotPassword;
+</script>
 
-   
-
-
-
-
-
-
-
-
-    <footer class="bottom-nav">
-      <button class="nav-btn" onclick="showPage('profile-page')"> <i class="uil uil-user nav-icon"> </i><svg xmlns="http://www.w3.org/2000/svg" width = "25" height = "25" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6"> 
-        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-       </svg> </button>
-      <button class="nav-btn" onclick="showPage('tasks-page')"><i class="uil uil-list-ul nav-icon"></i><svg xmlns="http://www.w3.org/2000/svg" width = "25" height = "25" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6"> 
-        <path stroke-linecap="round" stroke-linejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0 1 18 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3 1.5 1.5 3-3.75" /> 
-      </svg> </button>
-      <button class="nav-btn" onclick="showPage('calendar-page')"><i class="uil uil-calendar-alt nav-icon"></i><svg xmlns="http://www.w3.org/2000/svg" width = "25" height = "25" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6"> 
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-       </svg> </button>
-    </footer>
-
-  </div>
 </body>
 </html>
